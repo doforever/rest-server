@@ -25,6 +25,17 @@ app.get('/testimonials/:id', (req, res) => {
   else res.status(404).json({ message: 'Not found...' });
 });
 
+app.post('/testimonials', (req, res) => {
+  const { author, text } = req.body;
+
+  if (author && text) {
+    const id = uuidv4();
+    db.push({id, author, text});
+    res.json({ message: 'OK' });
+  }
+  else res.status(404).json({ message: 'Not found...' });
+});
+
 app.use((req, res) => {
   res.status(404).json({ message: 'Not found...' });
 });
