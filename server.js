@@ -48,6 +48,15 @@ app.put('/testimonials/:id', (req, res) => {
   else res.status(404).json({ message: 'Not found...' });
 });
 
+app.delete('/testimonials/:id', (req, res) => {
+  const item = db.find(item => item.id == req.params.id);
+  if (item) {
+    db.splice(db.indexOf(item), 1);
+    res.json({ message: 'OK' });
+  }
+  else res.status(404).json({ message: 'Not found...' });
+});
+
 app.use((req, res) => {
   res.status(404).json({ message: 'Not found...' });
 });
