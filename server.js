@@ -36,6 +36,18 @@ app.post('/testimonials', (req, res) => {
   else res.status(404).json({ message: 'Not found...' });
 });
 
+app.put('/testimonials/:id', (req, res) => {
+  const item = db.find(item => item.id == req.params.id);
+  const { author, text } = req.body;
+
+  if (item && author && text) {
+    item.author = author;
+    item.text = text;
+    res.json({ message: 'OK' });
+  }
+  else res.status(404).json({ message: 'Not found...' });
+});
+
 app.use((req, res) => {
   res.status(404).json({ message: 'Not found...' });
 });
