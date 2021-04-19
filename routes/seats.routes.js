@@ -17,9 +17,13 @@ router.route('/seats').post((req, res) => {
   const { day, seat, client, email } = req.body;
 
   if (day && seat && client && email) {
-    const id = uuidv4();
-    db.seats.push({ id, day, seat, client, email });
-    res.status(201).json({ message: 'Created' });
+    if (db.seats.some(booking => booking.seat == seat && booking.day == day)){
+      res.status(409).json({ message: "The slot is already taken..." });
+    } else {
+      const id = uuidv4();
+      db.seats.push({ id, day, seat, client, email });
+      res.status(201).json({ message: 'Created' });
+    }
   }
   else res.status(400).json({ message: 'Bad request...' });
 });
