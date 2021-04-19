@@ -4,10 +4,17 @@ import { Button, Progress, Alert } from 'reactstrap';
 import './SeatChooser.scss';
 
 class SeatChooser extends React.Component {
-  
+
+  loadInterval = null;
+
   componentDidMount() {
     const { loadSeats } = this.props;
     loadSeats();
+    this.loadInterval = setInterval(loadSeats, 120000);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.loadInterval);
   }
 
   isTaken = (seatId) => {
