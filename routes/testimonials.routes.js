@@ -24,9 +24,9 @@ router.route('/testimonials').post((req, res) => {
   if (author && text) {
     const id = uuidv4();
     db.testimonials.push({ id, author, text });
-    res.json({ message: 'OK' });
+    res.status(201).json({ message: 'Created' });
   }
-  else res.status(404).json({ message: 'Not found...' });
+  else res.status(400).json({ message: 'Bad request...' });
 });
 
 router.route('/testimonials/:id').put((req, res) => {
@@ -38,7 +38,8 @@ router.route('/testimonials/:id').put((req, res) => {
     item.text = text;
     res.json({ message: 'OK' });
   }
-  else res.status(404).json({ message: 'Not found...' });
+  else if (!item) res.status(404).json({ message: 'Not found...' });
+  else res.status(400).json({ message: 'Bad request...' });
 });
 
 router.route('/testimonials/:id').delete((req, res) => {

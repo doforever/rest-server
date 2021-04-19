@@ -3,8 +3,6 @@ const router = express.Router();
 const { v4: uuidv4 } = require('uuid');
 const db = require('../db');
 
-//  { id: 1, day: 1, seat: 3, client: 'Amanda Doe', email: 'amandadoe@example.com' },
-
 router.route('/seats').get((req, res) => {
   res.json(db.seats);
 });
@@ -21,9 +19,9 @@ router.route('/seats').post((req, res) => {
   if (day && seat && client && email) {
     const id = uuidv4();
     db.seats.push({ id, day, seat, client, email });
-    res.json({ message: 'OK' });
+    res.status(201).json({ message: 'Created' });
   }
-  else res.status(404).json({ message: 'Not found...' });
+  else res.status(400).json({ message: 'Bad request...' });
 });
 
 router.route('/seats/:id').put((req, res) => {
@@ -34,7 +32,8 @@ router.route('/seats/:id').put((req, res) => {
     Object.assign(item, { day, seat, client, email });
     res.json({ message: 'OK' });
   }
-  else res.status(404).json({ message: 'Not found...' });
+  else if (!item) res.status(404).json({ message: 'Not found...' });
+  else res.status(400).json({ message: 'Bad request...' });
 });
 
 router.route('/seats/:id').delete((req, res) => {

@@ -19,9 +19,9 @@ router.route('/concerts').post((req, res) => {
   if (performer && genre && price && day && image) {
     const id = uuidv4();
     db.concerts.push({ id, performer, genre, price, day, image });
-    res.json({ message: 'OK' });
+    res.status(201).json({ message: 'Created' });
   }
-  else res.status(404).json({ message: 'Not found...' });
+  else res.status(400).json({ message: 'Bad request...' });
 });
 
 router.route('/concerts/:id').put((req, res) => {
@@ -32,7 +32,8 @@ router.route('/concerts/:id').put((req, res) => {
     Object.assign(item, { performer, genre, price, day, image });
     res.json({ message: 'OK' });
   }
-  else res.status(404).json({ message: 'Not found...' });
+  else if (!item) res.status(404).json({ message: 'Not found...' });
+  else res.status(400).json({ message: 'Bad request...' });
 });
 
 router.route('/concerts/:id').delete((req, res) => {
