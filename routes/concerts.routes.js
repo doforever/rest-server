@@ -8,13 +8,15 @@ router.route('/concerts').get((req, res) => {
 });
 
 router.route('/concerts/:id').get((req, res) => {
-  const item = db.concerts.find(item => item.id == req.params.id);
+  const item = db.concerts.find(item => item.id === req.params.id);
   if (item) res.json(item);
   else res.status(404).json({ message: 'Not found...' });
 });
 
 router.route('/concerts').post((req, res) => {
-  const { performer, genre, price, day, image } = req.body;
+  const { performer, genre, image } = req.body;
+  const price = parseInt(req.body.price);
+  const day = parseInt(req.body.day);
 
   if (performer && genre && price && day && image) {
     const id = uuidv4();
@@ -25,8 +27,10 @@ router.route('/concerts').post((req, res) => {
 });
 
 router.route('/concerts/:id').put((req, res) => {
-  const item = db.concerts.find(item => item.id == req.params.id);
-  const { performer, genre, price, day, image } = req.body;
+  const item = db.concerts.find(item => item.id === req.params.id);
+  const { performer, genre, image } = req.body;
+  const price = parseInt(req.body.price);
+  const day = parseInt(req.body.day);
 
   if (item && performer && genre && price && day && image) {
     Object.assign(item, { performer, genre, price, day, image });
@@ -37,7 +41,7 @@ router.route('/concerts/:id').put((req, res) => {
 });
 
 router.route('/concerts/:id').delete((req, res) => {
-  const item = db.concerts.find(item => item.id == req.params.id);
+  const item = db.concerts.find(item => item.id === req.params.id);
   if (item) {
     db.concerts.splice(db.concerts.indexOf(item), 1);
     res.json({ message: 'OK' });

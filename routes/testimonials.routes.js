@@ -13,7 +13,7 @@ router.route('/testimonials/random').get((req, res) => {
 });
 
 router.route('/testimonials/:id').get((req, res) => {
-  const item = db.testimonials.find(item => item.id == req.params.id);
+  const item = db.testimonials.find(item => item.id === req.params.id);
   if (item) res.json(item);
   else res.status(404).json({ message: 'Not found...' });
 });
@@ -30,7 +30,7 @@ router.route('/testimonials').post((req, res) => {
 });
 
 router.route('/testimonials/:id').put((req, res) => {
-  const item = db.testimonials.find(item => item.id == req.params.id);
+  const item = db.testimonials.find(item => item.id === req.params.id);
   const { author, text } = req.body;
 
   if (item && author && text) {
@@ -43,7 +43,7 @@ router.route('/testimonials/:id').put((req, res) => {
 });
 
 router.route('/testimonials/:id').delete((req, res) => {
-  const item = db.testimonials.find(item => item.id == req.params.id);
+  const item = db.testimonials.find(item => item.id === req.params.id);
   if (item) {
     db.testimonials.splice(db.testimonials.indexOf(item), 1);
     res.json({ message: 'OK' });
