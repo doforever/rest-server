@@ -3,8 +3,6 @@ const router = express.Router();
 const { v4: uuidv4 } = require('uuid');
 const db = require('../db');
 
-// { id: 1, performer: 'John Doe', genre: 'Rock', price: 25, day: 1, image: '/img/uploads/1fsd324fsdg.jpg' },
-
 router.route('/concerts').get((req, res) => {
   res.json(db.concerts);
 });
