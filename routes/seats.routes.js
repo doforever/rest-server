@@ -25,6 +25,7 @@ router.route('/seats').post((req, res) => {
       const id = uuidv4();
       db.seats.push({ id, day, seat, client, email });
       res.status(201).json({ message: 'Created' });
+      req.io.emit('seatsUpdated', db.seats);
     }
   }
   else res.status(400).json({ message: 'Bad request...' });
