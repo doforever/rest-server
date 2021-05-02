@@ -23,6 +23,7 @@ exports.getById = async (req, res) => {
 
 exports.post = async (req, res) => {
   const { seat, client, email, day } = req.body;
+  let saved;
   try {
     // await Day.exists({_id: day});
     const isTaken = await Seat.exists({day: day, seat: seat});
@@ -30,13 +31,17 @@ exports.post = async (req, res) => {
       res.status(409).json({ message: "The slot is already taken..." });
     } else {
       const newSeat = new Seat({ seat, client, email, day });
-      await newSeat.save();
-      // req.io.emit('seatsUpdated', db.seats);
+      saved = await newSeat.save();
       res.status(201).json({ message: 'Created' });
     }
+
   }
   catch (err) {
     res.status(500).json({ message: err });
+  }
+  if (saved) {
+    const seats = await Seat.find();
+    req.io.emit('seatsUpdated', seats);
   }
 };
 
