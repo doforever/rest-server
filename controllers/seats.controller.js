@@ -31,7 +31,7 @@ exports.post = async (req, res) => {
     } else {
       const newSeat = new Seat({ seat, client, email, day });
       await newSeat.save();
-      req.io.emit('seatsUpdated', db.seats);
+      // req.io.emit('seatsUpdated', db.seats);
       res.status(201).json({ message: 'Created' });
     }
   }
