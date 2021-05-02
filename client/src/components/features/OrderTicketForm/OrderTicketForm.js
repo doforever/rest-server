@@ -6,25 +6,19 @@ import SeatChooser from './../SeatChooser/SeatChooserContainer';
 
 class OrderTicketForm extends React.Component {
 
-  days = [{
-    id: '608eee192d1022d0cbdc9206',
-    number: 1,
-    },{
-    id: '608eee1e2d1022d0cbdc9207',
-    number: 2,
-    },{
-    id: '608eee222d1022d0cbdc9208',
-    number: 3,
-   }];
-
-   state = {
+  state = {
     order: {
       client: '',
       email: '',
-      day: this.days[0].id,
+      day: '608eee192d1022d0cbdc9206',
       seat: '',
     },
     isError: false,
+  }
+
+  componentDidMount () {
+    const { loadDays } = this.props;
+    loadDays();
   }
 
   updateSeat = (e, seatId) => {
@@ -49,7 +43,8 @@ class OrderTicketForm extends React.Component {
   }
 
   getChosenDay = id => {
-    return this.days.find(day => day.id === id).number;
+    console.log(this.props.days);
+    // return this.props.days ? this.props.days.find(day => day._id === id).number : 1;
   };
 
   submitForm = async (e) => {
@@ -77,7 +72,7 @@ class OrderTicketForm extends React.Component {
   render() {
 
     const { updateSeat, updateTextField, submitForm } = this;
-    const { requests } = this.props;
+    const { requests, days } = this.props;
     const { order, isError } = this.state;
 
     return (
@@ -99,7 +94,7 @@ class OrderTicketForm extends React.Component {
             <FormGroup>
               <Label for="clientDay">Select which day of festivals are you interested in:</Label>
               <Input type="select" value={order.day} name="day" onChange={updateTextField} id="exampleSelect">
-                {this.days.map(({id, number}) => (
+                {days.map(({id, number}) => (
                   <option key={id} value={id}>{number}</option>
                 ))}
               </Input>
@@ -113,10 +108,10 @@ class OrderTicketForm extends React.Component {
             <Button color="primary" className="mt-3">Submit</Button>
           </Col>
           <Col xs="12" md="6">
-            <SeatChooser
+            {days && <SeatChooser
               chosenDay={this.getChosenDay(order.day)}
               chosenSeat={order.seat}
-              updateSeat={updateSeat} />
+              updateSeat={updateSeat} />}
           </Col>
         </Row>
       </Form>

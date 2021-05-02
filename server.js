@@ -13,6 +13,7 @@ app.use(express.static(path.join(__dirname, '/client/build')));
 const testimonialsRoutes = require('./routes/testimonials.routes');
 const concertsRoutes = require('./routes/concerts.routes');
 const seatsRoutes = require('./routes/seats.routes');
+const daysRoutes = require('./routes/days.routes');
 
 app.use(cors());
 app.use(express.urlencoded({ extended: false }));
@@ -26,6 +27,7 @@ app.use((req, res, next) => {
 app.use('/api', testimonialsRoutes);
 app.use('/api', concertsRoutes);
 app.use('/api', seatsRoutes);
+app.use('/api', daysRoutes);
 
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '/client/build/index.html'));
