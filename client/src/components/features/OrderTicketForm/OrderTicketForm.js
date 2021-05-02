@@ -6,7 +6,7 @@ import SeatChooser from './../SeatChooser/SeatChooserContainer';
 
 class OrderTicketForm extends React.Component {
 
-  state = {
+   state = {
     order: {
       client: '',
       email: '',
@@ -49,7 +49,6 @@ class OrderTicketForm extends React.Component {
         order: {
           client: '',
           email: '',
-          day: 1,
           seat: '',
         },
         isError: false,
