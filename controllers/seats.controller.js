@@ -1,9 +1,9 @@
 const Seat = require('../models/seat.model');
-// const Day = require('../models/day.model');
+const Day = require('../models/day.model');
 
 exports.getAll = async (req, res) => {
   try {
-    res.json(await Seat.find());
+    res.json(await Seat.find().populate('day'));
   }
   catch (err) {
     res.status(500).json({ message: err });
@@ -12,7 +12,7 @@ exports.getAll = async (req, res) => {
 
 exports.getById = async (req, res) => {
   try {
-    const s = await Seat.findById(req.params.id);
+    const s = await Seat.findById(req.params.id).populate('day');
     if (!s) res.status(404).json({ message: 'Not found' });
     else res.json(s);
   }
@@ -24,18 +24,17 @@ exports.getById = async (req, res) => {
 exports.post = async (req, res) => {
   const { seat, client, email, day } = req.body;
   try {
-    // await Day.exists({_id: day});
+    await Day.exists({_id: day});
     const isTaken = await Seat.exists({day: day, seat: seat});
     if (isTaken) {
       res.status(409).json({ message: "The slot is already taken..." });
     } else {
       const newSeat = new Seat({ seat, client, email, day });
-      await newSeat.save();
-      res.status(201).json({ message: 'Created' });
-      const seats = await Seat.find();
+      const saved = await newSeat.save();
+      res.status(201).json(saved);
+      const seats = await Seat.find().populate('day');
       req.io.emit('seatsUpdated', seats);
     }
-
   }
   catch (err) {
     res.status(500).json({ message: err });
@@ -45,7 +44,7 @@ exports.post = async (req, res) => {
 exports.put = async (req, res) => {
   const { seat, client, email, day } = req.body;
   try {
-    // await Day.exists({_id: day});
+    await Day.exists({_id: day});
     const isTaken = await Seat.exists({ day: day, seat: seat });
     if (isTaken) {
       res.status(409).json({ message: "The slot is already taken..." });
