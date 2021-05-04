@@ -23,7 +23,7 @@ class OrderTicketForm extends React.Component {
   }
 
   componentDidUpdate () {
-    if (!this.state.daysLoaded && this.props.daysRequests.success) {
+    if (!this.state.daysLoaded && this.props.daysRequests.success && this.props.days.length > 0) {
       this.setState({daysLoaded: true, order: {...this.state.order, day: this.props.days[0]._id}});
     }
   }
@@ -77,7 +77,7 @@ class OrderTicketForm extends React.Component {
   render() {
 
     const { updateSeat, updateTextField, submitForm } = this;
-    const { requests, days } = this.props;
+    const { requests, days, daysRequests } = this.props;
     const { order, isError, daysLoaded } = this.state;
 
     return (
@@ -88,6 +88,7 @@ class OrderTicketForm extends React.Component {
             { (requests['ADD_SEAT'] && requests['ADD_SEAT'].error && !isError) && <Alert color="danger">{requests['ADD_SEAT'].error}</Alert> }
             { (requests['ADD_SEAT'] && requests['ADD_SEAT'].success && !isError) && <Alert color="success">You've booked your ticket! Check you email in order to make a payment.</Alert> }
             { (requests['ADD_SEAT'] && requests['ADD_SEAT'].pending) && <Progress animated className="mb-5" color="primary" value={75} /> }
+            { (daysRequests.success && days.length < 1) && <Alert color="info">No concert data</Alert> }
             <FormGroup>
               <Label for="clientEmail">Name</Label>
               <Input type="text" value={order.client} name="client" onChange={updateTextField} id="clientName" placeholder="John Doe" />
@@ -99,7 +100,7 @@ class OrderTicketForm extends React.Component {
             <FormGroup>
               <Label for="clientDay">Select which day of festivals are you interested in:</Label>
               <Input type="select" value={order.day} name="day" onChange={updateTextField} id="exampleSelect">
-                {days.map(({_id, number}) => (
+                {days.sort((d1, d2) => (d1.number - d2.number)).map(({_id, number}) => (
                   <option key={_id} value={_id}>{number}</option>
                 ))}
               </Input>
