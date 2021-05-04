@@ -100,7 +100,7 @@ class OrderTicketForm extends React.Component {
             <FormGroup>
               <Label for="clientDay">Select which day of festivals are you interested in:</Label>
               <Input type="select" value={order.day} name="day" onChange={updateTextField} id="exampleSelect">
-                {days.map(({_id, number}) => (
+                {days.sort((d1, d2) => (d1.number - d2.number)).map(({_id, number}) => (
                   <option key={_id} value={_id}>{number}</option>
                 ))}
               </Input>

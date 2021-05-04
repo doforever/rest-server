@@ -38,7 +38,7 @@ app.use((req, res) => {
 });
 
 // connects our backend code with the database
-mongoose.connect('mongodb+srv://doforever:aR7eDbz2RO3DZ44H@newwavedb.8mija.mongodb.net/myFirstDatabase?retryWrites=true&w=majority', { useNewUrlParser: true });
+mongoose.connect('mongodb+srv://doforever:aR7eDbz2RO3DZ44H@newwavedb.8mija.mongodb.net/NewWaveDB?retryWrites=true&w=majority', { useNewUrlParser: true });
 const db = mongoose.connection;
 
 db.once('open', () => {
