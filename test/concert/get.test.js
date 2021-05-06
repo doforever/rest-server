@@ -2,7 +2,7 @@ const chai = require('chai');
 const chaiHttp = require('chai-http');
 const server = require('../../server');
 const Concert = require('../../models/concert.model');
-// const Day = require('../../models/day.model');
+const Seat = require('../../models/seat.model');
 
 chai.use(chaiHttp);
 
@@ -11,19 +11,38 @@ const request = chai.request;
 
 describe('GET /api/concerts', () => {
   before(async () => {
-    // const testDay = new Day({ _id: '5d9f1140f10a81216cfd4408', number: 2 });
-    // await testDay.save();
+    const testSeat = new Seat({
+      day: "5d9f1140f10a81216cfd4408",
+      seat: 3,
+      client: "Amanda Doe",
+      email: "amandadoe@example.com"
+    });
+    await testSeat.save();
 
-    const testConOne = new Concert({ _id: '5d9f1159f81ce8d1ef2bee48', performer: 'TestPerformer', genre: 'TestGenre', price: 5, day: '5d9f1140f10a81216cfd4408', image: 'con.png' });
+    const testConOne = new Concert({
+      _id: '5d9f1159f81ce8d1ef2bee48',
+      performer: 'TestPerformer',
+      genre: 'TestGenre',
+      price: 5,
+      day: '5d9f1140f10a81216cfd4408',
+      image: 'con.png'
+    });
     await testConOne.save();
 
-    const testConTwo = new Concert({ _id: '5d9f1159f81ce8d1ef2bee49', performer: 'TestPerformer2', genre: 'TestGenre', price: 5, day: '5d9f1140f10a81216cfd4408', image: 'con.png' });
+    const testConTwo = new Concert({
+      _id: '5d9f1159f81ce8d1ef2bee49',
+      performer: 'TestPerformer2',
+      genre: 'TestGenre',
+      price: 5,
+      day: '5d9f1140f10a81216cfd4408',
+      image: 'con.png'
+    });
     await testConTwo.save();
   });
 
   after(async () => {
     await Concert.deleteMany();
-    // await Day.deleteMany();
+    await Seat.deleteMany();
   });
 
   it('/ should return all concerts', async () => {
@@ -38,5 +57,14 @@ describe('GET /api/concerts', () => {
     expect(res.status).to.be.equal(200);
     expect(res.body).to.be.an('object');
     expect(res.body.performer).to.be.equal('TestPerformer');
+  });
+
+  it('/ should return concerts with tickets property showing number of available tickets', async () => {
+    const res = await request(server).get('/api/concerts');
+    expect(res.body).to.be.an('array');
+    for (concert of res.body) {
+      expect(concert.tickets).to.be.a('number');
+      expect(concert.tickets).to.be.equal(49);
+    }
   });
 });
