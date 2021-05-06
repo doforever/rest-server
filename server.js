@@ -38,11 +38,14 @@ app.use((req, res) => {
 });
 
 // connects our backend code with the database
-mongoose.connect('mongodb+srv://doforever:aR7eDbz2RO3DZ44H@newwavedb.8mija.mongodb.net/NewWaveDB?retryWrites=true&w=majority', { useNewUrlParser: true });
+const dbURI = process.env.NODE_ENV === 'test'
+  ? 'mongodb://localhost:27017/NWTest'
+  : 'mongodb+srv://doforever:aR7eDbz2RO3DZ44H@newwavedb.8mija.mongodb.net/NewWaveDB?retryWrites=true&w=majority';
+mongoose.connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true });
 const db = mongoose.connection;
 
 db.once('open', () => {
-  console.log('Connected to the database');
+  console.log('Connected to the database: ', dbURI);
 });
 db.on('error', err => console.log('Error ' + err));
 
@@ -54,3 +57,5 @@ const io = socket(server);
 io.on('connection', socket => {
   console.log('New socket ', socket.id);
 });
+
+module.exports = server;
