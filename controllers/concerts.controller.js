@@ -1,9 +1,19 @@
 const Concert = require('../models/concert.model');
 const Day = require('../models/day.model');
+const Seat = require('../models/seat.model');
 
 exports.getAll = async (req, res) => {
   try {
-    res.json(await Concert.find().populate('day'));
+    const allConcerts = await Concert.find().populate('day');
+    const displayConcerts = await Promise.all(allConcerts.map(async concert => {
+      const bookedSeats = await Seat.countDocuments({day: concert.day._id});
+      return {
+        ...concert.toObject(),
+        tickets: (50 - bookedSeats),
+      };
+    }));
+
+    res.json(displayConcerts);
   }
   catch (err) {
     res.status(500).json({ message: err });
