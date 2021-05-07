@@ -8,10 +8,11 @@ exports.getAll = async (req, res) => {
     const displayConcerts = await Promise.all(allConcerts.map(async concert => {
       const bookedSeats = await Seat.countDocuments({day: concert.day._id});
       return {
-        ...concert,
+        ...concert.toObject(),
         tickets: (50 - bookedSeats),
       };
     }));
+
     res.json(displayConcerts);
   }
   catch (err) {
