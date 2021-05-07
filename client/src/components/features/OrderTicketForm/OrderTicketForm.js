@@ -24,7 +24,7 @@ class OrderTicketForm extends React.Component {
 
   componentDidUpdate () {
     if (!this.state.daysLoaded && this.props.daysRequests.success && this.props.days.length > 0) {
-      this.setState({daysLoaded: true, order: {...this.state.order, day: this.props.days[0]._id}});
+      this.setState({daysLoaded: true, order: {...this.state.order, day: this.props.days[0].id}});
     }
   }
 
@@ -49,7 +49,7 @@ class OrderTicketForm extends React.Component {
   }
 
   getChosenDay = id => {
-    return this.props.days.find(day => day._id === id).number;
+    return this.props.days.find(day => day.id === id).number;
   };
 
   submitForm = async (e) => {
@@ -100,8 +100,8 @@ class OrderTicketForm extends React.Component {
             <FormGroup>
               <Label for="clientDay">Select which day of festivals are you interested in:</Label>
               <Input type="select" value={order.day} name="day" onChange={updateTextField} id="exampleSelect">
-                {days.sort((d1, d2) => (d1.number - d2.number)).map(({_id, number}) => (
-                  <option key={_id} value={_id}>{number}</option>
+                {days.sort((d1, d2) => (d1.number - d2.number)).map(({id, number}) => (
+                  <option key={id} value={id}>{number}</option>
                 ))}
               </Input>
               <small id="dayHelp" className="form-text text-muted">Every day of the festival uses individual ticket. You can book only one ticket at the time.</small>

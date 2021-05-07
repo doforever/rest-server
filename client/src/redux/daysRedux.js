@@ -58,7 +58,11 @@ const initialState = {
 export default function reducer(statePart = initialState, action = {}) {
   switch (action.type) {
     case LOAD_DAYS:
-      return { ...statePart, data: [...action.payload] };
+      const days = action.payload.map(({ _id, ...others }) => ({
+        id: _id,
+        ...others,
+      }));
+      return { ...statePart, data: [...days] };
     case START_REQUEST:
       return { ...statePart, request: { pending: true, error: null, success: false } };
     case END_REQUEST:
