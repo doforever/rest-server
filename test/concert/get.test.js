@@ -3,6 +3,7 @@ const chaiHttp = require('chai-http');
 const server = require('../../server');
 const Concert = require('../../models/concert.model');
 const Seat = require('../../models/seat.model');
+const Day = require('../../models/day.model');
 
 chai.use(chaiHttp);
 
@@ -11,8 +12,12 @@ const request = chai.request;
 
 describe('GET /api/concerts', () => {
   before(async () => {
+    const testDay = new Day({ number: 2 });
+    const savedDay = await testDay.save();
+    dayId = savedDay._id;
+
     const testSeat = new Seat({
-      day: "5d9f1140f10a81216cfd4408",
+      day: dayId,
       seat: 3,
       client: "Amanda Doe",
       email: "amandadoe@example.com"
@@ -24,7 +29,7 @@ describe('GET /api/concerts', () => {
       performer: 'TestPerformer',
       genre: 'TestGenre',
       price: 5,
-      day: '5d9f1140f10a81216cfd4408',
+      day: dayId,
       image: 'con.png'
     });
     await testConOne.save();
@@ -34,7 +39,7 @@ describe('GET /api/concerts', () => {
       performer: 'TestPerformer2',
       genre: 'TestGenre',
       price: 5,
-      day: '5d9f1140f10a81216cfd4408',
+      day: dayId,
       image: 'con.png'
     });
     await testConTwo.save();
@@ -43,6 +48,7 @@ describe('GET /api/concerts', () => {
   after(async () => {
     await Concert.deleteMany();
     await Seat.deleteMany();
+    await Day.deleteMany();
   });
 
   it('/ should return all concerts', async () => {
