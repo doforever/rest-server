@@ -1,15 +1,19 @@
 const Concert = require('../models/concert.model');
 const Day = require('../models/day.model');
 const Seat = require('../models/seat.model');
+const Workshop = require('../models/workshop.model');
 
 exports.getAll = async (req, res) => {
   try {
     const allConcerts = await Concert.find().populate('day');
+    const allWorkshops = await Workshop.find();
     const displayConcerts = await Promise.all(allConcerts.map(async concert => {
       const bookedSeats = await Seat.countDocuments({day: concert.day._id});
+      const workshops = allWorkshops.filter( ws => concert._id.equals(ws.concertId) );
       return {
         ...concert.toObject(),
         tickets: (50 - bookedSeats),
+        workshops, 
       };
     }));
 

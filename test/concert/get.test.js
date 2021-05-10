@@ -4,6 +4,7 @@ const server = require('../../server');
 const Concert = require('../../models/concert.model');
 const Seat = require('../../models/seat.model');
 const Day = require('../../models/day.model');
+const Workshop = require('../../models/workshop.model');
 
 chai.use(chaiHttp);
 
@@ -43,12 +44,19 @@ describe('GET /api/concerts', () => {
       image: 'con.png'
     });
     await testConTwo.save();
+
+    const testWorkshop = new Workshop({ name: 'Test', concertId: '5d9f1159f81ce8d1ef2bee48'});
+    await testWorkshop.save();
+
+    const testWorkshop1 = new Workshop({ name: 'Test1', concertId: '5d9f1159f81ce8d1ef2bee49' });
+    await testWorkshop1.save();
   });
 
   after(async () => {
     await Concert.deleteMany();
     await Seat.deleteMany();
     await Day.deleteMany();
+    await Workshop.deleteMany();
   });
 
   it('/ should return all concerts', async () => {
@@ -71,6 +79,15 @@ describe('GET /api/concerts', () => {
     for (concert of res.body) {
       expect(concert.tickets).to.be.a('number');
       expect(concert.tickets).to.be.equal(49);
+    }
+  });
+
+  it('/ should return concerts with workshops property with array of workshops', async () => {
+    const res = await request(server).get('/api/concerts');
+    expect(res.body).to.be.an('array');
+    for (concert of res.body) {
+      expect(concert.workshops).to.be.an('array');
+      expect(concert.workshops.length).to.be.equal(1);
     }
   });
 });
