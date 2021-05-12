@@ -40,7 +40,7 @@ app.use((req, res) => {
 // connects our backend code with the database
 const dbURI = process.env.NODE_ENV === 'test'
   ? 'mongodb://localhost:27017/NWTest'
-  : 'mongodb+srv://doforever:aR7eDbz2RO3DZ44H@newwavedb.8mija.mongodb.net/NewWaveDB?retryWrites=true&w=majority';
+  : `mongodb+srv://doforever:${process.env.dbpass}@newwavedb.8mija.mongodb.net/NewWaveDB?retryWrites=true&w=majority`;
 mongoose.connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true });
 const db = mongoose.connection;
 
