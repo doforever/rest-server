@@ -45,11 +45,15 @@ let dbURI;
 switch (process.env.NODE_ENV){
   case 'test':
     dbURI = 'mongodb://localhost:27017/NWTest';
+    break;
   case 'production':
     dbURI = `mongodb+srv://doforever:${process.env.dbpass}@newwavedb.8mija.mongodb.net/NewWaveDB?retryWrites=true&w=majority`;
+    break;
   default:
     dbURI = 'mongodb://localhost:27017/NewWaveDB';
 }
+
+//const dbURI = process.env.NODE_ENV === 'test' ? 'mongodb://localhost:27017/NWTest' : 'mongodb://localhost:27017/NewWaveDB';
 
 mongoose.connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true });
 const db = mongoose.connection;
