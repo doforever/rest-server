@@ -36,7 +36,12 @@ exports.getById = async (req, res) => {
 };
 
 exports.post = async (req, res) => {
-  const { performer, genre, price, day, image} = req.body;
+  const performer = sanitize(req.body.performer),
+    genre = sanitize(req.body.genre),
+    price = sanitize(req.body.price),
+    day = sanitize(req.body.day),
+    image = sanitize(req.body.image);
+
   try {
     const newConcert = new Concert({ performer, genre, price, day, image });
     await newConcert.save();
