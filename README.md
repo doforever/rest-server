@@ -6,4 +6,4 @@ Data is stored with **MongoDB** (with **Mongoose**).
 There are some backend unit tests implemented with **Mocha** and **Chai**.
 
 # Deployed on Heroku
-https://secure-refuge-13330.herokuapp.com/
+https://secure-refuge-13330.herokuapp.com/ (**takes some time to load** becauses I use a free account)
